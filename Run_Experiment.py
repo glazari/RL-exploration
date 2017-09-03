@@ -72,6 +72,72 @@ num_cpu=16
 param_noise=False
 callback=None
 
+objective = 'Vanilla Q-learning for control purposes'
+
+description ="""
+###############################################################################
+#                          Expirement Description                             #
+#                                                                             #
+# Envirionment: {1:20s}{0:>43} 
+# Expirment Number: {2:10s}{0:>49}
+# Destination Folder: {3:40s}{0:>17}
+#                                                                             #
+# Objective: {4:60s}{0:>6}             
+#                                                                             #
+# '''''''''''''''''''''''                                                     #
+# 'Experiment parameters'                                                     #
+# '''''''''''''''''''''''                                                     #
+#                                                                             #
+# - Learning Rate: {5:<5g}{0:>54}
+# - Number of Time Steps: {6:<20d}{0:>33}
+# - Replay Memory Size: {7:<15d}{0:>40}
+# - Exploration Fraction: {8:<5f}{0:>45}
+# - Exploration Final Epsilon: {9:<5f}{0:>40}
+# - Train Frequency: {10:<5d}{0:>53}
+# - Learning Starts at: {11:<10d}{0:>45}
+# - Target Network Update frequency: {12:<10d}{0:>32}
+# - Gamma: {13:<.3f}{0:>63}
+# - Prioritized Replay: {14:10s}{0:>45}
+#{0:>78} 
+# - Batch Size = {15:<5d}{0:>57}
+# - Print Frequency = {16:<5d}{0:>52}
+# - Checkpoint Frequency = {17:<5d}{0:>47}
+# - Prioritized Replay alpha = {18:<5f}{0:>40}
+# - Prioritized Replay beta = {19:<5f}{0:>41}
+# - Prioritized replay beta iters = {20}{0:>39}
+# - Prioritized replay eps = {21:<5g}{0:>45}
+# - num cpu? = {22:<3d}{0:>61}
+# - Parameter Noise = {23:10s}{0:>47}
+# - callback = {24}{0:>60}
+#                                                                             #
+###############################################################################
+"""
+
+description = description.format('#',environment, expirement, folder, objective, 
+                                 lr, 
+                                 max_timesteps,
+                                 buffer_size,
+                                 exploration_fraction,
+                                 exploration_final_eps,
+                                 train_freq,
+                                 learning_starts,
+                                 target_network_update_freq,
+                                 gamma,
+                                 str(prioritized_replay),
+                                 batch_size,
+                                 print_freq,
+                                 checkpoint_freq,
+                                 prioritized_replay_alpha,
+                                 prioritized_replay_beta0,
+                                 prioritized_replay_beta_iters,
+                                 prioritized_replay_eps,
+                                 num_cpu,
+                                 str(param_noise),
+                                 callback
+                                )
+
+print(description)
+input()
 
 #makes the environment, and wraps it with a couple of preprocessing layers.
 env = gym.make(env_name)
