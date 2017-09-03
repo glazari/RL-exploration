@@ -41,10 +41,13 @@ environment = 'Seaquest'
 env_name = environment+'NoFrameskip-v4'
 
 #Builds the file name for where the model and stats will be stored
-model_name = environment+'_'+expirement+'_model'
-rewards_name = environment+'_'+expirement+'_rewards.pkl'
+name = environment+'_'+expirement
+model_name = name+'_model'
+rewards_name = name+'_rewards.pkl'
+description_name = name+'.description'
 model_file = os.path.join(folder, model_name)
 rewards_file = os.path.join(folder, rewards_name)
+description_file = os.path.join(folder, description_name)
 model_saved = False
 
 
@@ -137,6 +140,8 @@ description = description.format('#',environment, expirement, folder, objective,
                                 )
 
 print(description)
+with open(description_file, 'w') as f:
+    f.write(description)
 input()
 
 #makes the environment, and wraps it with a couple of preprocessing layers.
