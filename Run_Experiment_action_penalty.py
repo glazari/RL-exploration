@@ -77,6 +77,7 @@ callback=None
 
 #A description text for future reference
 objective = 'Q-learning with penalty for non null actions.'
+action_penalty = 0.1
 
 description ="""
 ###############################################################################
@@ -92,6 +93,7 @@ description ="""
 # 'Experiment parameters'                                                     #
 # '''''''''''''''''''''''                                                     #
 #                                                                             #
+# - Action Penalty: {25:<6f}{0:>53}
 # - Learning Rate: {5:<5g}{0:>54}
 # - Number of Time Steps: {6:<20d}{0:>33}
 # - Replay Memory Size: {7:<15d}{0:>40}
@@ -137,7 +139,8 @@ description = description.format('#',environment, expirement, folder, objective,
                                  prioritized_replay_eps,
                                  num_cpu,
                                  str(param_noise),
-                                 callback
+                                 callback,
+                                 action_penalty
                                 )
 
 print(description)
@@ -251,7 +254,7 @@ for t in range(max_timesteps):
     # Store transition in the replay buffer.
     #if not a null action there is a small penalty   
     if action:
-        rew += 0.01
+        rew += action_penalty
     replay_buffer.add(obs, action, rew, new_obs, float(done))
     obs = new_obs
     
