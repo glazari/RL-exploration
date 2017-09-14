@@ -30,11 +30,25 @@ from build_graph import build_act, build_train
 from replay_buffer import ReplayBuffer, PrioritizedReplayBuffer
 from atari_wrappers import wrap_dqn, ScaledFloatFrame, SaveCurrents
 
+#I should move this funciton somewhere else once I get the chance
+import cv2  
+def save_video(frames, file):
+    height, width, layers = frames[0].shape
+    
+    fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
+    video = cv2.VideoWriter(file, fourcc, 30, (width,height))
+    
+    for frame in frames:
+        r,g,b = cv2.split(frame)
+        bgr_img = cv2.merge([b,g,r])
+        video.write(bgr_img)
+    video.release()
+
 #Defines the folder where the results will be saved
 folder = 'New_stats/'
 
 #Number of the expirenment
-expirement = 'First_test'
+expirement = 'Video_test'
 
 #name of envirenment
 environment = 'Seaquest'
@@ -86,6 +100,7 @@ callback=None
 print_freq=2
 checkpoint_freq=10000
 save_stats = 1000
+save_video_freq = 1000
 
 
 description ="""
@@ -252,6 +267,7 @@ real_episode = {
 saved_mean_reward = None
 obs = env.reset()
 reset = True
+video = False
 for t in range(max_timesteps):
     if callback is not None:
         if callback(locals(), globals()):
@@ -348,10 +364,41 @@ for t in range(max_timesteps):
         mean_100ep_reward = episode_cliped_rew[0]
 
     
+    #save models
+    if (checkpoint_freq is not None and t > learning_starts and
+        num_episodes > 100 and t % checkpoint_freq == 0):
+        if saved_mean_reward is None or mean_100ep_reward > saved_mean_reward:
+            if print_freq is not None:
+                print('Saving model...')
+            U.save_state(model_file)
+            model_saved = True
+            saved_mean_reward = mean_100ep_reward
+    #save stats
+    if t % save_stats == 0: 
+        stats = {
+        'life episode': life_episode,
+        'real episode': real_episode,
+        }
+        with open(stats_file, 'wb') as f:
+            pickle.dump(stats, f)
+        with open(rewards_file, 'wb') as f:
+            pickle.dump(episode_cliped_rew, f)
+    
+    #save video
+    if t % save_video_freq == 0:
+        #the actual video saving is done at the end of the episode,
+        #so here we just set a flag.
+        video = True
+    
+    
     #Life episode end
     if done:
         #Real end of Episode
         if orig_env.current_done:
+            if video:
+                vid_file = os.path.join(folder, name+str(t)+'.avi')
+                save_video(real_episode['frames'],vid_file)
+                video = False
             #Reset variables associated with real episode
             real_episode['non null action'][-1] /= real_episode['sizes'][-1]
             real_episode['sizes'].append(0)
@@ -381,24 +428,5 @@ for t in range(max_timesteps):
                   'mean 100', mean_100ep_reward, 
                   'e-value %.2f' %
                     (exploration.value(t)))
-    
-    #save models
-    if (checkpoint_freq is not None and t > learning_starts and
-        num_episodes > 100 and t % checkpoint_freq == 0):
-        if saved_mean_reward is None or mean_100ep_reward > saved_mean_reward:
-            if print_freq is not None:
-                print('Saving model...')
-            U.save_state(model_file)
-            model_saved = True
-            saved_mean_reward = mean_100ep_reward
-    if t % save_stats == 0: 
-        stats = {
-        'life episode': life_episode,
-        'real episode': real_episode,
-        }
-        with open(stats_file, 'wb') as f:
-            pickle.dump(stats, f)
-        with open(rewards_file, 'wb') as f:
-            pickle.dump(episode_cliped_rew, f)
             
 print('done, did %s steps' % (t+1))
