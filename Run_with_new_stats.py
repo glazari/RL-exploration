@@ -48,7 +48,7 @@ def save_video(frames, file):
 folder = 'New_stats/'
 
 #Number of the expirenment
-expirement = 'Video_test'
+expirement = 'Video_test_'
 
 #name of envirenment
 environment = 'Seaquest'
@@ -56,6 +56,9 @@ env_name = environment+'NoFrameskip-v4'
 
 #Builds the file name for where the model and stats will be stored
 name = environment+'_'+expirement
+folder = folder+name
+os.mkdir(folder)
+
 model_name = name+'_model'
 rewards_name = name+'_rewards.pkl'
 stats_name = name+'_stats.pkl'
@@ -268,6 +271,8 @@ saved_mean_reward = None
 obs = env.reset()
 reset = True
 video = False
+Max = False
+max_reward = 0
 for t in range(max_timesteps):
     if callback is not None:
         if callback(locals(), globals()):
@@ -385,11 +390,13 @@ for t in range(max_timesteps):
             pickle.dump(episode_cliped_rew, f)
     
     #save video
-    if t % save_video_freq == 0:
+    if t % save_video_freq == 0 or real_episode['clipped reward'][-1] > max_reward:
         #the actual video saving is done at the end of the episode,
         #so here we just set a flag.
         video = True
-    
+        if real_episode['clipped reward'][-1] > max_reward:
+            Max = True
+            max_reward = real_episode['clipped reward'][-1]
     
     #Life episode end
     if done:
@@ -397,6 +404,9 @@ for t in range(max_timesteps):
         if orig_env.current_done:
             if video:
                 vid_file = os.path.join(folder, name+str(t)+'.avi')
+                if Max:
+                    vid_file = os.path.join(folder, name+str(t)+'Max.avi')
+                    Max = False
                 save_video(real_episode['frames'],vid_file)
                 video = False
             #Reset variables associated with real episode
