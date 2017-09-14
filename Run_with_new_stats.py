@@ -48,7 +48,7 @@ def save_video(frames, file):
 folder = 'New_stats/'
 
 #Number of the expirenment
-expirement = 'Video_test'
+expirement = 'Video_test1'
 
 #name of envirenment
 environment = 'Seaquest'
@@ -76,7 +76,7 @@ objective = 'Testing the new stats gathering mechanisms'
 
 #Parameters of Q-learning that could potentialy be tweaked
 lr=1e-4
-max_timesteps=2000000
+max_timesteps=5000000
 buffer_size=10000
 exploration_fraction=0.1
 exploration_final_eps=0.01
@@ -98,9 +98,9 @@ callback=None
 
 #Save/Show Frequencies
 print_freq=2
-checkpoint_freq=10000
-save_stats = 1000
-save_video_freq = 1000
+checkpoint_freq=50000
+save_stats = 50000
+save_video_freq = 500000
 
 
 description ="""
