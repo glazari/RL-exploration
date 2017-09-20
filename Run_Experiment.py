@@ -31,22 +31,8 @@ from replay_buffer import ReplayBuffer, PrioritizedReplayBuffer
 from atari_wrappers import wrap_dqn, ScaledFloatFrame, SaveCurrents
 from stats import Stats
 
-#I should move this funciton somewhere else once I get the chance
-import cv2  
-def save_video(frames, file):
-    height, width, layers = frames[0].shape
-    
-    fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-    video = cv2.VideoWriter(file, fourcc, 30, (width,height))
-    
-    for frame in frames:
-        r,g,b = cv2.split(frame)
-        bgr_img = cv2.merge([b,g,r])
-        video.write(bgr_img)
-    video.release()
-
 #Defines the folder where the results will be saved
-folder = 'New_stats/'
+folder = 'Results/'
 
 #Number of the expirenment
 experiment = input('-> Name this experiment: ')
