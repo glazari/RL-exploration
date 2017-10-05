@@ -10,7 +10,7 @@ Running the code is as simple as running the "Run_Experiment.py" script.
 
     python3 Run_Experiment.py
     
-It will ask you to name the experiment and show you the current parameters being used. To complete training the code takes around 6h to 12h depending on how many timesteps you set it up to run for.
+It will ask you to name the experiment and show you the current parameters being used. To complete training the code takes around 6h to 12h on a Geforce 1060 GPU, depending on how many timesteps you set it up to run for.
 
 
 ## Install dependencies
@@ -19,7 +19,7 @@ This code depends on *gym* for the atari emulator, *tensorflow* for the neural n
 
     pip3 install gym[atari] dill opencv-python
     
-    pip3 install tensorflow #Install thee gpu version for faster running code
+    pip3 install tensorflow #Install the gpu version for faster running code
 
 
 ## Disclaimer
