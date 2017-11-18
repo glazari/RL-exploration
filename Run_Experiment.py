@@ -20,7 +20,6 @@ import tensorflow as tf
 import zipfile
 
 #local imports
-import logger
 import models
 import tf_util as U
 
@@ -33,6 +32,10 @@ from stats import Stats
 
 #Defines the folder where the results will be saved
 folder = 'Results/'
+
+if not os.path.isdir(folder):
+    os.mkdir(folder)
+
 
 #Number of the expirenment
 experiment = input('-> Name this experiment: ')
@@ -98,7 +101,7 @@ description ="""
 #                          Experiment Description                             #
 #                                                                             #
 # Envirionment: {1:20s}{0:>43} 
-# Experiment Number: {2:10s}{0:>49}
+# Experiment Name: {2:30s}{0:>30}
 # Destination Folder: {3:40s}{0:>17}
 #                                                                             #
 # Objective: {4:60s}{0:>6}             
@@ -107,7 +110,7 @@ description ="""
 # 'Experiment parameters'                                                     #
 # '''''''''''''''''''''''                                                     #
 #                                                                             #
-# - Action Penalty: {25:<6f}{0:>53}
+# - Action Penalty: {25:<6f}{0:>51}
 # - Learning Rate: {5:<5g}{0:>54}
 # - Number of Time Steps: {6:<20d}{0:>33}
 # - Replay Memory Size: {7:<15d}{0:>40}
